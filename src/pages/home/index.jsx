@@ -1,8 +1,9 @@
+import { useEffect, useState } from "react";
 import "./style.css";
 import Trash from "../../assets/16qg.svg";
-import api from '../../services/api';
+import api from "../../services/api";
 
-//trabalhando com dados mocados simulando resultados >> API
+//trabalhando com dados mockados simulando resultados >> API
 
 // const users = [
 //   {
@@ -21,10 +22,19 @@ import api from '../../services/api';
 
 function Home() {
 
-  const users = []
+  const [users, setUsers] = useState([]);
+
+  //let users = []
 
   async function getUsers() {
+    const usersFromApi = await api.get("/users");
+    setUsers(usersFromApi.data);
   }
+ 
+
+  useEffect(() => {
+    getUsers();
+  }, []);
 
   return (
     <>
@@ -40,16 +50,21 @@ function Home() {
         {users.map((user) => (
           <div key={user.id} className="card">
             <div>
-              <p>Nome: <span>{user.name}</span> </p>
-              <p>Idade: <span>{user.age}</span> </p>
-              <p>Email: <span>{user.email}</span> </p>
+              <p>
+                Nome: <span>{user.name}</span>{" "}
+              </p>
+              <p>
+                Idade: <span>{user.age}</span>{" "}
+              </p>
+              <p>
+                Email: <span>{user.email}</span>{" "}
+              </p>
             </div>
             <button>
               <img src={Trash} />
             </button>
           </div>
         ))}
-
       </div>
     </>
   );
